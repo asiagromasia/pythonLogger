@@ -1,42 +1,30 @@
-import sys
 import os
+import sys
 import string
 import logging
-
+import time
 from random import choices
 from logging import basicConfig
 from functools import partial, partialmethod
-import time
+
+
 
 A = 0
 avgFindImp = 0
 average = []
 
-#create and configure trace
-logging.TRACE = 60
-logging.addLevelName(logging.TRACE, 'TRACE')
-logging.Logger.trace = partialmethod(logging.Logger.log, logging.TRACE)
-logging.trace = partial(logging.log, logging.TRACE)
-log_level = logging.TRACE
-
-LOG_FORMAT = "%(levelname)s %(asctime)s, in line [%(lineno)d] - %(message)s"
-
-#creating file for logging input
-logging.basicConfig(filename = "consoleapp.log", level = logging.DEBUG, format = LOG_FORMAT, filemode='w')
-
-#calling logger method to create logging object
-logger = logging.getLogger()
-
 #counting time
-# def measure_ops(func):
-#     def inner(*args, **kwargs):
-#         startTime = time.time()
-#         endTime = time.time()
-#         return_val = func(*args, **kwargs)
-#         dif = round(endTime - startTime, 3)
-#         print(f"Function `{func.__name__}` executed in {dif} seconds.")
-#         return return_val
-#     return inner
+#Decorator function that measure the execution time of the provided function.
+def measure_ops(func):
+    def inner(*args, **kwargs):
+        startTimeD = time.time()
+        return_val = func(*args, **kwargs)
+        endTimeD = time.time()
+        
+        execTime = round(endTimeD - startTimeD, 3)
+        print(f"Function `{func.__name__}` executed in {execTime} seconds.")
+        return return_val
+    return inner
 
 
 startRead = time.time()
@@ -50,9 +38,24 @@ endTime = time.time()
 dif = round(endTime - startTime, 3)
 dif2 = endTime - startTime
 
+#create and configure trace
+logging.TRACE = 60
+logging.addLevelName(logging.TRACE, 'TRACE')
+logging.Logger.trace = partialmethod(logging.Logger.log, logging.TRACE)
+logging.trace = partial(logging.log, logging.TRACE)
+log_level = logging.TRACE
 
 
-#@measure_ops
+#creating file for logging input and its format
+LOG_FORMAT = "%(levelname)s %(asctime)s, in line [%(lineno)d] - %(message)s"
+logging.basicConfig(filename = "consoleapp.log", level = logging.DEBUG, format = LOG_FORMAT, filemode='w')
+
+#calling logger method to create logging object
+logger = logging.getLogger()
+
+
+
+@measure_ops
 def main():   
     print("Welcome! ")
     logger.trace("Start tracing in main ")
@@ -78,25 +81,21 @@ def main():
     
     args[0:] = "" + readOWrite
     args[1] = "" + filePath
-    #print(args[0:])
-    #print(args[1])
     
     #looping according to users input read or write
     if(args[0].lower() == "w"):
-        #startTime
-        #logger.info(f"start counting time: {startTime} " )
+        startTime
+        logger.info(f"start counting time: {startTime} " )
         writeFile(args[1])
-        #endTime
-        #logger.info(f"stops counting the time at: {endTime} ")
     elif(args[0].lower() == 'r'): 
-        #startTime   
-        #logger.info(f"start counting time: {startTime} " )
+        startTime   
+        logger.info(f"start counting time: {startTime} " )
         readFile(args[1])
-        #endTime
-        #logger.info(f"stops counting the time at: {endTime} ")
     else:
         print("Command not Recognized: please use 'write' or 'read'")
         logging.error("User is not entering write or read")
+    endTime
+    logger.info(f"stops counting the time at: {endTime} ")
 
     #performance time - stored in array and being called
     admin = input("Do you want the report with performance time? y or n ")
@@ -114,7 +113,7 @@ def main():
             print("Average time to find the word 'imperdiet' in the line ", average[1] )
     logger.trace("the end of main entry block, finishing the application ")
         
-#@measure_ops       
+@measure_ops       
 def writeFile(filePath):
     logger.trace("start writeFile block ")
     startTime
@@ -131,7 +130,6 @@ def writeFile(filePath):
     sentence = input("Please enter a sentence and hit enter: ")    
     sentenceCounter = 1
 
-    startFind
     if sentence.count("imperdiet") > 0:
         endFind
         counter += sentence.count("imperdiet")
@@ -173,8 +171,7 @@ def writeFile(filePath):
     sum = sum + found
     avgWriteLine = sum / sentenceCounter
 
-    endTime
-    logger.info("end counting time in write: ", endTime)         
+      
     print("You have enter this amount of sentences: ", sentenceCounter)
     print("The number of times the word imperdient appears in the user input: ", counter ) 
     print("The number of sentences with the word imperdient: ", lineCounter )
@@ -188,10 +185,8 @@ def writeFile(filePath):
     var.close()   
     logger.trace("end of writeFile block ")
 
-#@measure_ops
+@measure_ops
 def readFile(filePath):
-    startTime
-    logger.info(f"start counting time: {startTime} " )
     logger.trace("in readFile block ")
     
 
@@ -235,8 +230,7 @@ def readFile(filePath):
     print("The number of times the word imperdient exist in file is: ", counter ) 
     print("The number of lines with the word imperdient: ", linecounter )
     print("Amount of lines ", countLines )
-    endTime
-    logger.info(f"stops counting the time at: {endTime} ")
+    
     var.close()   
     logger.trace("end of readFile block")
 
