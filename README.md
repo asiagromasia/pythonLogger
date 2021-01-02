@@ -1,1 +1,1 @@
-Usage of all logger level and great decorators with time measurements. 
+Usage of all logger levels and great decorators with time measurements. 
